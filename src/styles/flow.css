@@ -1,0 +1,49 @@
+
+.react-flow {
+  --xy-node-boxshadow-default: 
+    0px 3.54px 4.55px 0px rgba(0, 0, 0, 0.05), 
+    0px 3.54px 4.55px 0px rgba(0, 0, 0, 0.1), 
+    0px 0.51px 1.01px 0px rgba(0, 0, 0, 0.2);
+}
+
+.react-flow__node {
+  border-radius: 6px;
+  box-shadow: var(--xy-node-boxshadow-default);
+  min-width: 250px;
+}
+
+.react-flow__node.selected {
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+.react-flow__handle {
+  background-color: #fff;
+  border: 2px solid #64748b;
+  width: 10px;
+  height: 10px;
+}
+
+.react-flow__handle:hover {
+  background-color: #3b82f6;
+}
+
+.react-flow__edge-path {
+  stroke-width: 2;
+}
+
+.react-flow__controls {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border-radius: 8px;
+}
+
+.react-flow__controls-button {
+  border-radius: 4px;
+  padding: 4px;
+  margin: 3px;
+}
+
+.react-flow__minimap {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}

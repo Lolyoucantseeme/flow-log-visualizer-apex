@@ -1,73 +1,41 @@
-# Welcome to your Lovable project
 
-## Project info
+# Apex Flow Log Visualizer
 
-**URL**: https://lovable.dev/projects/f018adeb-6201-4758-ba4f-26261f37b1b6
+A beautiful web application for visualizing Apex execution logs in a flow diagram format, providing clear insights into function execution paths, SQL usage, and performance statistics.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- **Interactive Flow Visualization**: Visualize the execution path of Apex logs with color-coded nodes and animated connections
+- **Execution Statistics**: View detailed statistics about SOQL queries, execution time, and function calls
+- **File Upload**: Easily upload Apex log files for visualization
+- **Responsive Design**: Works on desktop and mobile devices
+- **Interactive Controls**: Pan, zoom, and navigate through complex execution flows
+- **Detail Cards**: View detailed information about each execution step
 
-**Use Lovable**
+## Usage
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f018adeb-6201-4758-ba4f-26261f37b1b6) and start prompting.
+1. **Upload a Log File**: Drag and drop an Apex log file onto the uploader, or click to select a file
+2. **View the Flow**: The application will parse the log and display the execution flow
+3. **Interact with the Diagram**: 
+   - Zoom in/out with mouse wheel or pinch gestures
+   - Pan by dragging in empty areas
+   - Click on nodes to view detailed information
+   - Use the controls in the bottom right to adjust the view
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
+## Development
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- React + TypeScript
+- ReactFlow for flow visualization
+- Tailwind CSS for styling
+- shadcn/ui for UI components
 
-## How can I deploy this project?
+## Future Enhancements
 
-Simply open [Lovable](https://lovable.dev/projects/f018adeb-6201-4758-ba4f-26261f37b1b6) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- Advanced log parsing capabilities
+- Support for different log formats
+- Export functionality for diagrams
+- Performance analysis tools
+- Comparison between different log executions
+- Dark mode support
