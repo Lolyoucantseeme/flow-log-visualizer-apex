@@ -7,6 +7,8 @@ const statusColorMap = {
   success: "bg-green-600",
   error: "bg-red-600",
   warning: "bg-amber-600",
+  start: "bg-green-600",
+  end: "bg-red-600",
 };
 
 const typeToLabel = {
@@ -14,17 +16,19 @@ const typeToLabel = {
   trigger: "Trigger",
   beforeUpdate: "BeforeUpdate",
   afterUpdate: "AfterUpdate",
+  dml: "DML",
 };
 
 interface LogNodeProps {
   data: {
     node: LogNodeType;
+    onStatsClick: (node: LogNodeType) => void;
   };
   selected: boolean;
 }
 
 const LogFlowNode = ({ data, selected }: LogNodeProps) => {
-  const { node } = data;
+  const { node, onStatsClick } = data;
   const statusColor = statusColorMap[node.status] || "bg-gray-600";
 
   return (
@@ -36,12 +40,15 @@ const LogFlowNode = ({ data, selected }: LogNodeProps) => {
         <div className="font-semibold text-gray-800">{node.label}</div>
         {node.details && <div className="text-sm text-gray-600 mt-1">{node.details}</div>}
         
-        <div className="mt-2 text-xs space-y-1 bg-gray-50 p-2 rounded">
+        <div className="mt-2 text-xs space-y-1 bg-gray-50 p-2 rounded cursor-pointer hover:bg-gray-100" onClick={() => onStatsClick(node)}>
           <div className="flex gap-1">
-            <span className="text-blue-600">{node.stats.soql}</span> SOQL | <span>{node.stats.soqlRows}</span> SOQL Rows
+            <span className="text-blue-600 font-bold">{node.stats.soql}</span> SOQL | <span className="font-bold">{node.stats.soqlRows}</span> SOQL Rows
           </div>
           <div className="flex gap-1">
-            <span className="text-blue-600">{node.stats.methodTime}</span> milliseconds Taken
+            {node.stats.totalMethod && (
+              <><span className="text-blue-600 font-bold">{node.stats.totalMethod}</span> Total Method | </>
+            )}
+            <span className="text-blue-600 font-bold">{node.stats.methodTime}</span> milliseconds Taken
           </div>
         </div>
       </div>
