@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ReactFlow,
@@ -36,22 +35,26 @@ const FlowDiagram = ({ logData }: LogFlowVisualizerProps) => {
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [fit, setFit] = useState(true);
 
-  // Create tree-like structure with hierarchical layout
-  const calculateNodePositions = (
+  // Create tree-like structure with hierarchical layout - Fixed to avoid variable initialization issues
+  const calculateNodePositions = useCallback((
     nodes: LogNodeType[], 
     parentId: string | null = null,
     level = 0,
-    xOffset = 0
-  ): { nodes: Node[]; xOffset: number } => {
+    startXOffset = 0
+  ): { nodes: Node[]; endXOffset: number } => {
     const childNodes = nodes.filter(n => 
       (parentId === null && !n.parentId) || 
       n.parentId === parentId
     );
     
-    let currentXOffset = xOffset;
     let resultNodes: Node[] = [];
+    let currentXOffset = startXOffset;
     
-    childNodes.forEach((node, index) => {
+    // Process each child node
+    for (let i = 0; i < childNodes.length; i++) {
+      const node = childNodes[i];
+      
+      // Calculate positions for this node's children first
       const childResult = calculateNodePositions(
         nodes, 
         node.id, 
@@ -59,15 +62,22 @@ const FlowDiagram = ({ logData }: LogFlowVisualizerProps) => {
         currentXOffset
       );
       
+      // Get the width that was used by children
+      const childrenWidth = childResult.endXOffset - currentXOffset;
+      
+      // The width of this node
+      const nodeWidth = 250;
+      
       // Position this node
-      const width = 250;
+      // If it has children, center it over its children; otherwise, place at current offset
       const position = {
-        x: childResult.xOffset > currentXOffset 
-          ? (childResult.xOffset - width) / 2 + currentXOffset
+        x: childrenWidth > 0 
+          ? currentXOffset + (childrenWidth - nodeWidth) / 2 
           : currentXOffset,
         y: level * 200
       };
       
+      // Add this node to the result
       resultNodes.push({
         id: node.id,
         type: "logNode",
@@ -78,22 +88,32 @@ const FlowDiagram = ({ logData }: LogFlowVisualizerProps) => {
         },
       });
       
-      // Add child nodes
+      // Add child nodes to the result
       resultNodes = [...resultNodes, ...childResult.nodes];
       
-      // Update offset for next sibling
-      currentXOffset = Math.max(childResult.xOffset, currentXOffset + width + 50);
-    });
+      // Update the offset for the next sibling
+      // If this node has children, use the space after its last child
+      // Otherwise, move past this node's width plus a margin
+      currentXOffset = childrenWidth > 0 
+        ? childResult.endXOffset
+        : currentXOffset + nodeWidth + 50;
+    }
     
-    return { nodes: resultNodes, xOffset: currentXOffset };
-  };
+    return { nodes: resultNodes, endXOffset: currentXOffset };
+  }, []);
 
   // Convert our log data to ReactFlow nodes and edges
   const initialNodes: Node[] = useMemo(() => {
+    if (!logData || !logData.nodes || logData.nodes.length === 0) {
+      return [];
+    }
     return calculateNodePositions(logData.nodes).nodes;
-  }, [logData.nodes]);
+  }, [logData.nodes, calculateNodePositions]);
 
   const initialEdges: Edge[] = useMemo(() => {
+    if (!logData || !logData.edges) {
+      return [];
+    }
     return logData.edges.map((edge) => ({
       id: edge.id,
       source: edge.source,
