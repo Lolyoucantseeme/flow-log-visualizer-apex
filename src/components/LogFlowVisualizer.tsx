@@ -11,7 +11,7 @@ import {
   Node,
   Edge,
   ConnectionLineType,
-  useReactFlow,
+  ReactFlowProvider,
 } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -30,10 +30,11 @@ interface LogFlowVisualizerProps {
   logData: LogData;
 }
 
-const LogFlowVisualizer = ({ logData }: LogFlowVisualizerProps) => {
-  const reactFlowInstance = useReactFlow();
+// Main component that renders the flow diagram
+const FlowDiagram = ({ logData }: LogFlowVisualizerProps) => {
   const [selectedNode, setSelectedNode] = useState<LogNodeType | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+  const [fit, setFit] = useState(true);
 
   // Create tree-like structure with hierarchical layout
   const calculateNodePositions = (
@@ -106,15 +107,6 @@ const LogFlowVisualizer = ({ logData }: LogFlowVisualizerProps) => {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [fit, setFit] = useState(true);
-
-  useEffect(() => {
-    if (fit) {
-      setTimeout(() => {
-        reactFlowInstance.fitView({ padding: 0.2 });
-      }, 100);
-    }
-  }, [fit, reactFlowInstance]);
 
   const handleNodeClick = useCallback((node: LogNodeType) => {
     setSelectedNode(node);
@@ -122,7 +114,7 @@ const LogFlowVisualizer = ({ logData }: LogFlowVisualizerProps) => {
   }, []);
 
   return (
-    <div className="w-full h-full bg-gray-50">
+    <>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -218,6 +210,17 @@ const LogFlowVisualizer = ({ logData }: LogFlowVisualizerProps) => {
           )}
         </DialogContent>
       </Dialog>
+    </>
+  );
+};
+
+// Wrapper component that provides the ReactFlow context
+const LogFlowVisualizer = ({ logData }: LogFlowVisualizerProps) => {
+  return (
+    <div className="w-full h-full bg-gray-50">
+      <ReactFlowProvider>
+        <FlowDiagram logData={logData} />
+      </ReactFlowProvider>
     </div>
   );
 };
