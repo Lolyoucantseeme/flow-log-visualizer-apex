@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ReactFlow,
@@ -34,6 +35,12 @@ const FlowDiagram = ({ logData }: LogFlowVisualizerProps) => {
   const [selectedNode, setSelectedNode] = useState<LogNodeType | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [fit, setFit] = useState(true);
+
+  // Define handleNodeClick function before it's used
+  const handleNodeClick = useCallback((node: LogNodeType) => {
+    setSelectedNode(node);
+    setDetailsDialogOpen(true);
+  }, []);
 
   // Create tree-like structure with hierarchical layout - Fixed to avoid variable initialization issues
   const calculateNodePositions = useCallback((
@@ -100,7 +107,7 @@ const FlowDiagram = ({ logData }: LogFlowVisualizerProps) => {
     }
     
     return { nodes: resultNodes, endXOffset: currentXOffset };
-  }, []);
+  }, [handleNodeClick]);
 
   // Convert our log data to ReactFlow nodes and edges
   const initialNodes: Node[] = useMemo(() => {
@@ -127,11 +134,6 @@ const FlowDiagram = ({ logData }: LogFlowVisualizerProps) => {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-  const handleNodeClick = useCallback((node: LogNodeType) => {
-    setSelectedNode(node);
-    setDetailsDialogOpen(true);
-  }, []);
 
   return (
     <>
